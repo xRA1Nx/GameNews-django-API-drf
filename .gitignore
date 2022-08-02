@@ -1,3 +1,4 @@
 /.env
-.idea
-.git
+/.idea
+/.git
+/def templates/

@@ -6,10 +6,17 @@ class Author(models.Model):
     is_active = models.BooleanField(default=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.username
+
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     subscribers = models.ManyToManyField(User, through='CategoryUser')
+
+    def __str__(self):
+        return self.name
 
 
 class Post(models.Model):
@@ -18,10 +25,14 @@ class Post(models.Model):
     title = models.CharField(max_length=80)
     small_img = models.TextField(max_length=500)
     main_img = models.TextField(max_length=500)
+    watched = models.IntegerField(default=0)
 
     date_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     categorys = models.ManyToManyField(Category, through='CategoryPost')
+
+    def get_absolute_url(self):
+        return f'/{self.id}'
 
 
 class Comment(models.Model):
