@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('gamenews_app.urls', namespace='gnews_ns')),
-    # path('', include('gamenews_app.urls')),
+    path('', include('gamenews_app.urls', namespace='gamenews')),
+    path('accounts/', include('allauth.urls')),
+    path('lk/', include('userprofile.urls', namespace='gn_lk'))
 
 ]

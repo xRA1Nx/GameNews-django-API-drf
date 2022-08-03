@@ -1,0 +1,102 @@
+{% extends "default.html"%}
+{% load static%}
+
+{% block title %}
+Личный кабинет
+{% endblock title %}
+
+{% block main %}
+<main class="container container-white" id="main">
+    {% endblock main %}
+
+    {% block section %}
+    <section class="white-section-100">
+        <div class="lk-box">
+            <h1 class="h1-white h1-white-margin-b">Личный кабинет</h1>
+            <div class=user-data>
+                <div class="user-avatar">
+                    <img class="user-avatar-img" src="{{ request.user.avatar }}">
+                    <nav>
+                        <a href="{% url 'profile:edit'%}?action=ava-edit">изменить</a>
+                        <a href="{% url 'profile:edit'%}?action=ava-del">удалить</a>
+                    </nav>
+                </div>
+
+                <div class="user-info">
+                    <p><strong>Фамилия</strong>:
+                        {{ fname }}
+                        <a href="{% url 'profile:edit'%}?action=edit-fname">изменить</a>
+                    </p>
+                    <p><strong>Имя:</strong>
+                        {{ lname }}
+                        <a href="{% url 'profile:edit'%}?action=edit-lname">изменить</a>
+                    </p>
+                    <p><strong>Эл. почта:</strong>
+                        {{ request.user.email }}
+                        <a href="{% url 'profile:edit'%}?action=edit-email">изменить</a>
+                    </p>
+                    <p><strong>Псевдоним:</strong>
+                        {{ request.user.username }}
+                        <a href="{% url 'profile:edit'%}?action=edit-nick">изменить</a>
+                    </p>
+                    <p class=p-row-action>
+          <span class="profile-button">
+             <a href="/accounts/password/change/">сменить пароль</a>
+              <!--              <a href="#">сменить пароль</a>-->
+          </span>
+                        <span class="profile-button exit-link">
+            <a href="#">Выйти</a>
+          </span>
+                    </p>
+
+                </div>
+            </div>
+
+
+            <!-- Подписки -->
+            <main class="profile-main">
+                <div class="subsribtions">
+                    <p class="subsribtions-title">Ваши подписки:</p>
+                    {% if cats %}
+                    <form method="POST" action="{% url 'gnews:unscribe'%}">
+                        <input type="hidden" name='action' value="unsubscibe">
+                        {% csrf_token %}
+                        <ul class="subscriptions-list">
+                            {% for cat in cats %}
+                            <li>
+                                <span>{{ cat.name}} </span>
+                                <button class="reuse-btn" type="submit" name="cat_id" value="{{cat.id}}">
+                                    отписаться
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </form>
+                    {% else %}
+                    <p class="subsribtions-title">У вас нет активных подписок</p>
+                    {% endif %}
+                </div>
+
+
+                <div class="profile-actions">
+                    {% if not is_author %}
+                    <p class="profile-button">Для размещения и редактирования новостей нужны авторсие права
+                        <a href="{% url 'profile:upgrade' %}"> Получить права</a></p>
+                    {% else %}
+                    <p class="profile-button"><a href="#">МОДЕРИРОВАТЬ КОММЕНТАРИИ
+                    </a></p>
+                    <p class="profile-button"><a href="{% url 'profile:downgrade' %}">Отказаться от авторских прав</a>
+                    </p>
+                    {% endif %}
+                </div>
+            </main>
+        </div>
+
+
+        {% block pagination %}
+        {% endblock pagination %}
+    </section>
+    {% endblock section %}
+
+    {% block aside%}
+    {% endblock aside%}

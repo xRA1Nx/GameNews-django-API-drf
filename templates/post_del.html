@@ -7,25 +7,25 @@ Games Portal Статья
 
 {% block main %}
 <main class="container container-white" id="main">
-{% endblock main %}
+    {% endblock main %}
 
-{% block section %}
-<section class="white-section-100">
-    <div class="forms-box">
-        <h1 class="h1-white h1-white-margin-b">
-            Внимание!!! Данная новость будет удалена !!!
-        </h1>
-        <h2>
-            <form method="post">
-                {% csrf_token%}
-                {{form}}
-                <input class="inp-submit" type="submit" value="удалить">
-            </form>
-        </h2>
-    </div>
+    {% block section %}
+    <section class="white-section-100">
+        <div class="forms-box">
+            <h1 class="h1-white h1-white-margin-b">
+                Внимание!!! Данная новость будет удалена !!!
+            </h1>
+            <h2>
+                <form method="post">
+                    {% csrf_token%}
+                    {{form}}
+                    <input class="inp-submit" type="submit" value="удалить">
+                </form>
+            </h2>
+        </div>
 
-</section>
-{% endblock section %}
+    </section>
+    {% endblock section %}
 
-{% block aside %}
-{% endblock aside %}
+    {% block aside %}
+    {% endblock aside %}

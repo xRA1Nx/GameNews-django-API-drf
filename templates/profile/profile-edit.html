@@ -1,0 +1,101 @@
+{% extends "default.html"%}
+
+{% block title %}
+Изменение данных
+{% endblock title %}
+
+{% block main %}
+<main class="container container-white" id="main">
+    {% endblock main %}
+
+    {% block section %}
+
+
+    <section class="white-section-100">
+        <div class="lk-box">
+
+            {% if action == 'ava-edit'%}
+            <h1 class="h1-white h1-white-margin-b">Изменение аватара</h1>
+            <form class="reuse-form" method='post'>
+                {% csrf_token %}
+                <div>
+                    {% if error %}
+                    <span>{{error}}</span><br>
+                    {% endif %}
+                    <input class="inp" type="url" id="ava" name="ava"
+                           placeholder="укажите название ссылки на ваш аватар" size=35>
+                    <input class="inp-submit" type="SUBMIT" value="изменить">
+                </div>
+            </form>
+            {% endif %}
+
+            {% if action == 'edit-lname' %}
+            <h1 class="h1-white h1-white-margin-b">Изменение фамилии</h1>
+            <form class="reuse-form" method='post'>
+                {% csrf_token %}
+                <div>
+                     {% if error %}
+                    <span>{{error}}</span><br>
+                    {% endif %}
+                    <input class="inp" type="text" id="lname" name="lname" placeholder="укажите вашу фамилию">
+                    <input class="inp-submit" type="SUBMIT" value="изменить">
+                </div>
+            </form>
+            {% endif %}
+
+            {% if action == 'edit-fname' %}
+            <h1 class="h1-white h1-white-margin-b">Изменение имени</h1>
+            <form class="reuse-form" method='post'>
+                {% csrf_token %}
+                <div>
+                     {% if error %}
+                    <span>{{error}}</span><br>
+                    {% endif %}
+                    <input class="inp" type="text" id="fname" name="fname" placeholder="укажите ваше имя">
+                    <input class="inp-submit" type="SUBMIT" value="изменить">
+                </div>
+            </form>
+            {% endif %}
+
+
+            {% if action == 'edit-nick' %}
+            <h1 class="h1-white h1-white-margin-b">Изменение ника</h1>
+            <form class="reuse-form" method='post'>
+                {% csrf_token %}
+                <div>
+                     {% if error %}
+                    <span>{{error}}</span><br>
+                    {% endif %}
+                    <input class="inp" type="text" id="nick" name="nick" placeholder="укажите ваш ник">
+                    <input class="inp-submit" type="SUBMIT" value="изменить">
+                </div>
+            </form>
+            {% endif %}
+
+
+            {% if action == 'edit-email' %}
+            <h1 class="h1-white h1-white-margin-b">Изменение email</h1>
+            <form class="reuse-form" method='post'>
+                {% csrf_token %}
+                <div>
+                     {% if error %}
+                    <span>{{error}}</span><br>
+                    {% endif %}
+                    <input class="inp" type="email" id="email" name="email" placeholder="укажите ваш email">
+                    <input class="inp-submit" type="SUBMIT" value="изменить">
+                </div>
+            </form>
+            <p class="change-profile-attention">После изменения данных понадобится повторно авторизоваться</p>
+            {% endif %}
+
+
+        </div>
+
+
+    </section>
+
+    {% endblock section %}
+    {% block aside %}
+    {% endblock aside %}
+
+

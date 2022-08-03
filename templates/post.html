@@ -11,11 +11,13 @@
               {{ post.title }}
             </p>
             <nav class="post-actions">
+              {% if not is_subscriber %}
               <a
                 class="post-actions-link describ-link"
-                href="./subscriptions.html"
+                href="{% url 'gnews:subscribe' post.id %}"
                 >Подписаться</a
               >
+              {% endif %}
 
               <ul class="post-actions-list">
                 <li>
