@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+Добрый день! {{user}}
+{% for cat in cats%}
+<h3>Список новостей категории <b>"{{cat}}"</b> за неделю:</h3>
+        <br>
+        <br>
+<table>
+    {% for post in posts %}
+    {% if cat in post.categorys.all%}
+    <tr>
+        <td>{{post.title}} -></td>
+        <td><a href="{{site}}{{ post.id }}">ссылка</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+</table>
+{% endfor %}
+
+
+    <p> краткое содержание:
+    <br>
+    {{my_post.text|truncatechars:50}}
+    </p>
+</body>
+</html>

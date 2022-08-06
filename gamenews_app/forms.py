@@ -3,19 +3,19 @@ from django.forms import ModelForm, CharField, Textarea, MultipleChoiceField, Hi
     SelectMultiple, ChoiceField, Select
 
 # наполняем choices  для формы
-authors = list(map(lambda x: (x, x.user.username), Author.objects.all()))
+# authors = list(map(lambda x: (x, x.user.username), Author.objects.all()))
 cats = list(map(lambda x: (x.id, x.name), Category.objects.all()))
 
 
 class PostAddForm(ModelForm):
-    author = ChoiceField(
-        label='авторы',
-        choices=authors,
-        widget=Select(attrs={
-            'placeholder': "выберите автора",
-            'class': "inp",
-        })
-    )
+    # author = ChoiceField(
+    #     label='авторы',
+    #     choices=authors,
+    #     widget=Select(attrs={
+    #         'placeholder': "выберите автора",
+    #         'class': "inp",
+    #     })
+    # )
 
     categorys = MultipleChoiceField(
         label="категории",
@@ -62,6 +62,6 @@ class PostAddForm(ModelForm):
         model = Post
         fields = ['categorys', 'main_img', 'small_img', 'title', 'description', 'text', 'author']
 
-        # widgets = {
-        #     'author': HiddenInput(),
-        # }
+        widgets = {
+            'author': HiddenInput(),
+        }

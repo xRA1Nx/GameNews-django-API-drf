@@ -38,6 +38,7 @@ class NewsView(ListView):
     context_object_name = 'news'
     paginate_by = 9
 
+
     def get_queryset(self):
         category = self.request.GET.get('category')
         query = qs_comm_count.order_by('-date_time')
@@ -102,12 +103,13 @@ class PostAddView(PermissionRequiredMixin, CreateView):
     form_class = PostAddForm
     permission_required = 'gamenews_app.add_post'
 
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     user = self.request.user
-    #     author = Author.objects.get(user_id=user.pk)
-    #     initial['author'] = author
-    #     return initial
+    # передаем в инициализацию дефолтное значение текущего юзера для автора
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        author = Author.objects.get(user_id=user.pk)
+        initial['author'] = author
+        return initial
 
 
 class PostUpdView(PermissionRequiredMixin, UpdateView):
