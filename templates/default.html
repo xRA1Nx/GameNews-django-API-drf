@@ -151,6 +151,7 @@
                 <form class="header-form-search">
                     <input
                             type="text"
+                            name="text"
                             placeholder="ПОИСК"
                             class="header-input-search"
                     />
@@ -173,75 +174,84 @@
     <div class="header-bottom">
         <nav class="game-icons container">
             <ul class="nav-list game-icons-list">
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Diablo">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Diablo.svg"
                                 alt="diablo icon"
                         />
                     </a>
-                    <a class="game-name" href="#">Diablo</a>
+                    <a class="game-name" href="{% url 'gnews:list' %}?category=Diablo">Diablo</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Overwatch">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Overwatch.svg"
                                 alt="Overwatch icon"
                         />
                     </a>
-                    <a href="#" class="game-name">Overwatch</a>
+                    <a href="{% url 'gnews:list' %}?category=Overwatch" class="game-name">Overwatch</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=HOS">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Hots.svg"
                                 alt="Herous of the storm icon"
                         />
                     </a>
-                    <a href="#" class="game-name">Herous of the storm</a>
+                    <a href="{% url 'gnews:list' %}?category=HOS" class="game-name">Herous of the storm</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Starcraft">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Starcraft_2.svg"
                                 alt="Starcraft 2 icon"
                         />
                     </a>
-                    <a href="#" class="game-name">Starcraft</a>
+
+                    <a href="{% url 'gnews:list' %}?category=Starcraft" class="game-name">Starcraft</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Hearthstone">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Hearthstone.svg"
                                 alt="Hearthstone icon"
                         />
                     </a>
-                    <a href="#" class="game-name">Hearthstone</a>
+                    <a href="{% url 'gnews:list' %}?category=Hearthstone" class="game-name">Hearthstone</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Warcraft">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/WoW.svg"
                                 alt="World of Warcraft icon"
                         />
                     </a>
-                    <a href="#" class="game-name">World of Warcraft</a>
+                    <a href="{% url 'gnews:list' %}?category=Warcraft" class="game-name">World of Warcraft</a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="{% url 'gnews:list' %}?category=Другие игры">
                         <img
                                 class="game-icon icons"
                                 src="/static/imgs/icons/games/Other_Games.svg"
                                 alt="Other Games"
                         />
                     </a>
-                    <a href="#" class="game-name">Другие игры</a>
+                    <a href="{% url 'gnews:list' %}?category=Другие игры" class="game-name">Другие игры</a>
+
                 </li>
             </ul>
         </nav>
@@ -259,7 +269,7 @@
             <span class="main-header-logo-first">Game</span>
             <span class="main-header-logo-second">News</span>
         </div>
-        {% for post in news%}
+        {% for post in page_obj%}
         <div class="main-news">
             <a class="post-link" href="{% url 'gnews:detail' post.id%}">
                 <div class="img-container">
@@ -294,13 +304,13 @@
         </div>
         {% endfor %}
 
-
+        {% if page_obj.has_other_pages%}
         <div class="pagination">
 
             <button class="btn-pag btn-pag-left" aria-label="previous-page button">
                 {% if page_obj.has_previous %}
                 <a class="pag-btn-link"
-                   href="?page={{ page_obj.previous_page_number }}">
+                   href="?page={{ page_obj.previous_page_number }}{{GET_params}}">
                     {% else %}
                     <a class="pag-btn-link" href="#">
                         {% endif %}
@@ -313,27 +323,27 @@
             </button>
 
 
-            <a class='pag-start-end' href='?page=1'>в начало</a>
+            <a class='pag-start-end' href='?page=1{{GET_params}}'>в начало</a>
 
 
             {% for p in page_obj.paginator.page_range %}
             {% if page_obj.number == p %}
-            <a class='pag-link pag-activ' href='?page={{p}}'>{{p}}</a>
+            <a class='pag-link pag-activ' href="?page={{p}}{{GET_params}}">{{p}}</a>
 
 
             {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
-            <a class='pag-link' href='?page={{p}}'>{{p}}</a>
+            <a class='pag-link' href='?page={{p}}{{GET_params}}'>{{p}}</a>
             {% endif %}
             {% endfor %}
 
             <a class='pag-start-end'
-               href="?page={{ page_obj.paginator.num_pages }}">в конец</a>
+               href="?page={{ page_obj.paginator.num_pages }}{{GET_params}}">в конец</a>
 
 
             <button class="btn-pag btn-pag-right" aria-label="next-page button">
                 {% if page_obj.has_next %}
                 <a class="pag-btn-link"
-                   href="?page={{ page_obj.next_page_number }}">
+                   href="?page={{ page_obj.next_page_number }}{{GET_params}}">
                     {% else %}
                     <a class="pag-btn-link" href="#">
                         {% endif %}
@@ -344,6 +354,7 @@
                     </a>
             </button>
         </div>
+ {% endif %}
 
 
     </section>

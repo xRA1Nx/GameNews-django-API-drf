@@ -11,13 +11,13 @@
               {{ post.title }}
             </p>
             <nav class="post-actions">
-              {% if not is_subscriber %}
-              <a
-                class="post-actions-link describ-link"
-                href="{% url 'gnews:subscribe' post.id %}"
-                >Подписаться</a
+               <a  class="post-actions-link describ-link" href="{% url 'gnews:subscribe' post.id %}">
+                {% if not is_subscriber %}
+                Подписаться
+                {% endif %}
+              </a
               >
-              {% endif %}
+
 
               <ul class="post-actions-list">
                 <li>
@@ -72,6 +72,7 @@
 
         </div>
         <div class="discussion-conteiner" id="comments">
+          {% if request.user.is_authenticated %}
           <form method="post" class="form-post-comment">
             <textarea
               class="input-post-comment"
@@ -85,6 +86,7 @@
             <input class="submit-comment" type="submit" />
             <!-- <a href="link-comm-edit">редактировать</a> -->
           </form>
+          {% endif %}
 
           {% for comment in comments%}
           <div class="post-comment">

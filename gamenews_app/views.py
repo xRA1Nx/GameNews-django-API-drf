@@ -2,11 +2,12 @@ from django.http import HttpResponseRedirect
 
 from .forms import PostAddForm
 from .models import Post, Author, Category
-from django.db.models import Count, Case, When
+from django.db.models import Count, Case, When, Q
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
 
+# с помощью annotate Получаем доп поле count_comments содержащее инфо о кол-ве комментариев
 qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
 
 
@@ -36,13 +37,35 @@ class NewsView(ListView):
     context_object_name = 'news'
     paginate_by = 9
 
-    # с помощью annotate Получаем доп поле count_comments содержащее инфо о кол-ве комментариев
     def get_queryset(self):
-        return qs_comm_count.order_by('-date_time')
+        category = self.request.GET.get('category')
+        query = qs_comm_count.order_by('-date_time')
+        text = self.request.GET.get('text')
+
+        # Если производится поиск , т.е. существует get параметр text
+        if text:
+            text = text.strip()
+            query = query.filter(Q(title__icontains=text) | Q(text__icontains=text) | Q(description__icontains=text))
+
+        # Если новость фильтруют по категории , т.е. существует get параметр category
+        if category:
+            query = query.filter(categorys__name__icontains=category)
+
+        return query
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        category = self.request.GET.get('category')
+        text = self.request.GET.get('text')
+
+        url_category = f"&category={category}" if category else ""
+        url_search = f"&text={text.strip()}" if text else ""
+
         context = super().get_context_data(**kwargs)
         context['aside'] = qs_comm_count.order_by('-count_comments')[0:3]
+        # context['url_category'] = url_category # дополняем get параметр в пагинации
+        # context['url_search'] = url_category+url_search  # дополняем get параметр в пагинации
+        context['GET_params'] = url_category + url_search  # дополняем get параметр в пагинации
+
         return context
 
 
@@ -56,15 +79,15 @@ class PostView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         cur_user = self.request.user
+        is_author = cur_user.is_authenticated and Author.objects.filter(user=cur_user).exists()
+
+        is_subscriber = False
         cats = self.object.categorys.all()
         for cat in cats:
             if cur_user in cat.subscribers.all():
-                flag = True
+                is_subscriber = True
                 break
-            else:
-                flag = False
-        is_author = Author.objects.filter(user=cur_user).exists()
-        is_subscriber = flag
+
         post_text = self.object.text.split("\n")
         context = super().get_context_data(**kwargs)
         context['post_text'] = post_text
