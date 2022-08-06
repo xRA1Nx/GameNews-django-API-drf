@@ -10,6 +10,7 @@
             <p>
               {{ post.title }}
             </p>
+            {% if request.user.is_authenticated %}
             <nav class="post-actions">
                <a  class="post-actions-link describ-link" href="{% url 'gnews:subscribe' post.id %}">
                 {% if not is_subscriber %}
@@ -41,6 +42,7 @@
                 </li>
               </ul>
             </nav>
+            {% endif %}
           </h1>
           <div class="post-author-conteiner">
             <p>

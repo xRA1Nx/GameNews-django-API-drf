@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import CharField
+
 from users.models import User
 
 
@@ -14,8 +16,15 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     subscribers = models.ManyToManyField(User, through='CategoryUser')
 
-    def __str__(self):
+    def __str__(self) -> CharField:
         return self.name
+
+    # добавляем метод возрващающий список email подписчиков категории
+    def get_subscrubers_email_and_name(self) -> set:
+        res = set()
+        for user in self.subscribers.all():
+            res.add((user.email, user))
+        return res
 
 
 class Post(models.Model):
@@ -30,7 +39,7 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     categorys = models.ManyToManyField(Category, through='CategoryPost')
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return f'/{self.id}'
 
 

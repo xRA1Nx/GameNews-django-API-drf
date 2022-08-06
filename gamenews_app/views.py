@@ -15,6 +15,7 @@ qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
 def subscrib(request, **kwargs):
     post = Post.objects.get(id=kwargs['pk'])
     user = request.user
+    print(post.categorys.all())
     for cat in post.categorys.all():
         if user not in cat.subscribers.all():
             cat.subscribers.add(request.user)
@@ -56,14 +57,10 @@ class NewsView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         category = self.request.GET.get('category')
         text = self.request.GET.get('text')
-
         url_category = f"&category={category}" if category else ""
         url_search = f"&text={text.strip()}" if text else ""
-
         context = super().get_context_data(**kwargs)
         context['aside'] = qs_comm_count.order_by('-count_comments')[0:3]
-        # context['url_category'] = url_category # дополняем get параметр в пагинации
-        # context['url_search'] = url_category+url_search  # дополняем get параметр в пагинации
         context['GET_params'] = url_category + url_search  # дополняем get параметр в пагинации
 
         return context
@@ -83,17 +80,17 @@ class PostView(DetailView):
 
         is_subscriber = False
         cats = self.object.categorys.all()
-        for cat in cats:
-            if cur_user in cat.subscribers.all():
-                is_subscriber = True
-                break
+        # формируем список из булен значений проверки каждой из категории на подписчика
+        subsribe_check_list = map(lambda x: self.request.user in x.subscribers.all(), cats)
 
         post_text = self.object.text.split("\n")
         context = super().get_context_data(**kwargs)
         context['post_text'] = post_text
         context['is_author'] = is_author
         context['aside'] = qs_comm_count.order_by('-count_comments')[0:3]
-        context['is_subscriber'] = is_subscriber
+
+        # в случаее если пользователь подписан на все категории статьи
+        context['is_subscriber'] = all(subsribe_check_list)
         # обращаемся к обьекту post и берем из него все комменты
         context['comments'] = self.object.comment_set.all().order_by('-date_time')
         return context
