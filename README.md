@@ -1,7 +1,7 @@
 Портал игровых новостей сделан на основе новостного сайта с тематикой игр blizzard - glasscannon.ru
 
 STACK технологий:
-  PostgreSql, Django, Celery, CSS, JS, Redis, DRF (in progress), Docker (in progress)
+  PostgreSql, Django, Celery, CSS, JS, Redis, DRF, Docker (in progress)
   
 Зависимости проекта:
   Все зависимости приведены в файле requirements.txt. 
