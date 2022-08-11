@@ -134,7 +134,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         user = self.request.user
-        cats = user.category_set.all()
+        cats = user.categorys.all()
         author = Author.objects.filter(user_id=user.id)
         is_author = author.exists() and author[0].is_active
         context = super().get_context_data(**kwargs)

@@ -15,4 +15,5 @@ urlpatterns = [
     path('subscribe/<int:pk>', subscrib, name='subscribe'),
     path('unscribe/', unscrib, name='unscribe'),
 
+
 ]
