@@ -31,12 +31,7 @@ class NewsAPIView(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-date_time')
     pagination_class = NewsPaginator
     filter_backends = (DjangoFilterBackend,)
-    # filterset_fields = ['categorys', 'date_time']
     filterset_class = PostFilterApi
-    # filterset_class = ""
-
-    # permission_classes = [IsOwnerOrReadOnly]
-    # permission_classes = [IsAuthorOrReadOnly]
 
     def get_permissions(self):
         if self.action in ['update', 'destroy', 'partial_update']:
