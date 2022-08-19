@@ -1,24 +1,23 @@
-Портал игровых новостей сделан на основе новостного сайта с тематикой игр blizzard - glasscannon.ru
+Портал игровых новостей сделан на основе новостного сайта с тематикой игр blizzard - glasscannon.ru<br>
 
-STACK технологий:
-  PostgreSql, Django, Celery, CSS, JS, Redis, DRF, Docker (in progress)
-  
-Зависимости проекта:
-  Все зависимости приведены в файле requirements.txt. 
-  Для их установки нужно использовать команду pip install -r requirements.txt  
-  
-Конфигурация проекта:
-  Все личные данные от почты, Редис, берутся из виртуального окружения. Для полного функционирования проекта необходимо указать свои данные либо в settings.py, либо также вынести в .env 
+<b>stack</b>:<br>
+  Docker-compose, PostgreSql, Django, Celery, CSS, JS, Redis, DRF, Docker (in progress)<br>
+ 
+<b>Конфигурация проекта:</b><br>
+  Все личные данные от почты, Редис, берутся из виртуального окружения. Для полного функционирования проекта необходимо указать свои данные либо в settings.py, либо также вынести в .env<br>
 
-Запуск проекта
-  1)python manage.py runserver
-    Для запуска из под Windows задач по расписанию:
-      2)celery -A gamenews_proj beat (2-м окном терминала)
-      3)celery -A gamenews_proj worker -l info -P eventlet (3м окном терминала)
+<b>Запуск проекта</b><br>
+  docker compose build (создаем/импортируем образы, формируем сервисы)<br>
+  docker compose up (пред запуск проекта)<br>
+  <u>в отдельной консоли:</u><br>
+  docker compose run db pg_restore -U postgres --verbose --clean --no-acl --no-owner -h localhost -d gamenews db.backup<br>
+  docker exec -i db_pg pg_restore -U postgres --verbose --clean --no-acl --no-owner -h localhost -d gamenews db.backup<br>
 
-Функциональность проекта:
-  Реализовано:
-  
+    Для запуска задач по расписанию:<br>
+      2)celery -A gamenews_proj beat (2-м окном терминала)<br>
+      3)celery -A gamenews_proj worker -l info -P eventlet (3м окном терминала)<br>
+
+<b>Функциональность проекта:</b>
     -API (на основной странице приведено меню из возможных ссылок - http://127.0.0.1:8000/api/submit-data/):
       документация к API - http://127.0.0.1:8000/api/swagger/ или http://127.0.0.1:8000/api/redoc/
       Авторизация - http://127.0.0.1:8000/api/auth/login/
@@ -40,6 +39,5 @@ STACK технологий:
         Также помощью CELERY осуществляется еженедельная отправка сообщений по всем новым статья за неделю.
 
   В работе по приоритетности:
-    - Завернуть проект в docker : срок до 15.08
-    - Добавить функционал для добавления пользователями комментариев к статьям и модеррировании этих комментариев администрацией : срок до 18.08
+    - Добавить функционал для добавления пользователями комментариев к статьям и модеррировании этих комментариев администрацией
     
