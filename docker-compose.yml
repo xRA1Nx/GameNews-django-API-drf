@@ -1,0 +1,42 @@
+
+version: '3'
+services:
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=gamenews
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=321678
+    depends_on:
+      - db
+
+  db:
+    container_name: db_pg
+    image: postgres
+    hostname: postgres
+    ports:
+      - "6543:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 321678
+      POSTGRES_DB: gamenews
+    volumes:
+      -  ./db_backup/db.backup:/db.backup
+      - ./data/db:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin

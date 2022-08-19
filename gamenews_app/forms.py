@@ -4,7 +4,10 @@ from django.forms import ModelForm, CharField, Textarea, MultipleChoiceField, Hi
 
 # наполняем choices  для формы
 # authors = list(map(lambda x: (x, x.user.username), Author.objects.all()))
+
+
 cats = list(map(lambda x: (x.id, x.name), Category.objects.all()))
+
 
 
 class PostAddForm(ModelForm):

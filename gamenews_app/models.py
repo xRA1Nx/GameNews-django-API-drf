@@ -63,3 +63,4 @@ class CategoryPost(models.Model):
 class CategoryUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
