@@ -10,7 +10,6 @@
 {% for cat in cats%}
 <h3>Список новостей категории <b>"{{cat}}"</b> за неделю:</h3>
         <br>
-        <br>
 <table>
     {% for post in posts %}
     {% if cat in post.categorys.all%}
@@ -24,10 +23,5 @@
 </table>
 {% endfor %}
 
-
-    <p> краткое содержание:
-    <br>
-    {{my_post.text|truncatechars:50}}
-    </p>
 </body>
 </html>

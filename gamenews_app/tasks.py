@@ -32,7 +32,7 @@ def celery_every_week_notify():
     from_email = 'django.sending@yandex.ru'
 
     for email, user in emails_and_users:
-        categorys = user.category_set.all()
+        categorys = user.categorys.all().filter(post__in=posts_for_week_send)
         to = email
         html_content = render_to_string('email/evere_week_send.html',
                                         {

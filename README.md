@@ -15,8 +15,8 @@
   5)docker compose up - все последующие запуски проекта<br>
 
     Для запуска задач по расписанию:<br>
-      2)celery -A gamenews_proj beat (2-м окном терминала)<br>
-      3)celery -A gamenews_proj worker -l info -P eventlet (3м окном терминала)<br>
+      2)docker compose run web celery -A gamenews_proj worker -l info -P eventlet  (2-м окном терминала)<br>
+      3)docker compose run web celery -A gamenews_proj beat (3м окном терминала)<br>
 
 <b>Функциональность проекта</b>:
 
