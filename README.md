@@ -10,9 +10,9 @@
   1)docker compose build (создаем/импортируем образы, формируем сервисы)<br>
   2)docker compose up (пред запуск проекта)<br>
   <u>в отдельной консоли:</u><br>
-  3)docker exec -i db_pg pg_restore -U postgres --verbose --clean --no-acl --no-owner -h localhost -d gamenews db.backup<br> (установка дампа начальной БД).
-  4)docker compose down - останавливаем контенеры (для применения изменений в БД)
-  5)docker compose up - все последующие запуски проекта
+  3)docker exec -i db_pg pg_restore -U postgres --verbose --clean --no-acl --no-owner -h localhost -d gamenews db.backup<br> (установка дампа начальной БД).<br>
+  4)docker compose down - останавливаем контенеры (для применения изменений в БД)<br>
+  5)docker compose up - все последующие запуски проекта<br>
 
     Для запуска задач по расписанию:<br>
       2)celery -A gamenews_proj beat (2-м окном терминала)<br>
