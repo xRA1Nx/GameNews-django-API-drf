@@ -1,7 +1,7 @@
 Портал игровых новостей сделан на основе новостного сайта с тематикой игр blizzard - glasscannon.ru<br>
 
 <b>stack</b>:<br>
-  Docker-compose, PostgreSql, Django, Celery, CSS, JS, Redis, DRF, Docker (in progress)<br>
+  Django, DRF, Docker-compose, PostgreSql, Celery, Redis, DRF, CSS, HTML, JS
  
 <b>Конфигурация проекта:</b><br>
   Все личные данные от почты, Редис, берутся из виртуального окружения. Для полного функционирования проекта необходимо указать свои данные либо в settings.py, либо также вынести в .env<br>
