@@ -25,7 +25,7 @@ app.conf.beat_schedule = {
     # ДЛЯ ОТЛАДКИ:
     # 'every_week_notify': {
     #     'task': 'gamenews_app.tasks.celery_every_week_notify',
-    #     'schedule': 60,
+    #     'schedule': 20,
     #     'args': (),
     # },
 

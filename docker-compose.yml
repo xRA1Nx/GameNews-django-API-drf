@@ -13,6 +13,7 @@ services:
       - POSTGRES_NAME=gamenews
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=321678
+      - POSTGRES_HOST=db
     depends_on:
       - db
 
@@ -20,12 +21,11 @@ services:
     container_name: db_pg
     image: postgres
     hostname: postgres
-    ports:
-      - "6543:5432"
     environment:
+      POSTGRES_DB: gamenews
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 321678
-      POSTGRES_DB: gamenews
+      POSTGRES_HOST: db
     volumes:
       -  ./db_backup/db.backup:/db.backup
       - ./data/db:/var/lib/postgresql/data

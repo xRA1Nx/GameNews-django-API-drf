@@ -94,10 +94,13 @@ WSGI_APPLICATION = 'gamenews_proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gamenews',
-        'USER': 'postgres',
-        'PASSWORD': '321678',
-        'HOST': 'db',
+        # 'NAME': 'gamenews',
+        # 'USER': 'postgres',
+        # 'PASSWORD': '321678',
+        'NAME': os.getenv('POSTGRES_NAME'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
         'PORT': 5432,
     }
 }
@@ -184,4 +187,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
-

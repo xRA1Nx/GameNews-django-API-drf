@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import CharField
+from typing import List, Tuple
 
 from users.models import User
 
@@ -25,6 +26,10 @@ class Category(models.Model):
         for user in self.subscribers.all():
             res.add((user.email, user))
         return res
+
+    @staticmethod
+    def get_choices() -> list:
+        return list(map(lambda x: (x.id, x.name), Category.objects.all()))
 
 
 class Post(models.Model):
@@ -63,4 +68,3 @@ class CategoryPost(models.Model):
 class CategoryUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-

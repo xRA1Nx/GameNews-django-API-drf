@@ -2,12 +2,10 @@ import requests
 from rest_framework import serializers
 from gamenews_app.models import Post, User, Category, CategoryPost, CategoryUser, Author
 
-cats = list(map(lambda x: (x.id, x.name), Category.objects.all()))
-
 
 # Для отображения выпадающего списка в форме
 class CategorySerializer(serializers.ModelSerializer):
-    name = serializers.MultipleChoiceField(choices=cats)
+    name = serializers.MultipleChoiceField(choices=Category.get_choices())
 
     class Meta:
         model = Category

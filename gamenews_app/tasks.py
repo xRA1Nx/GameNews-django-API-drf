@@ -25,14 +25,14 @@ def celery_every_week_notify():
     emails_and_users = set()
 
     # формируем уникальное множество из кортеджей (емейл, имя) пользователей
-    for cat in Category.objects.all():
+    for cat in Category.objects.filter(post__in=posts_for_week_send):  # берем только те категории где есть нужные посты
         emails_and_users.update(cat.get_subscrubers_email_and_name())
 
     subject = 'Ваша подписка на GameNews. Еженедельная рассылка от CELERY'
     from_email = 'django.sending@yandex.ru'
 
     for email, user in emails_and_users:
-        categorys = user.categorys.all().filter(post__in=posts_for_week_send)
+        categorys = user.categorys.filter(post__in=posts_for_week_send)
         to = email
         html_content = render_to_string('email/evere_week_send.html',
                                         {

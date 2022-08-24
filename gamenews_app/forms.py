@@ -1,28 +1,13 @@
-from .models import Post, Author, Category
+from .models import Post, Category
 from django.forms import ModelForm, CharField, Textarea, MultipleChoiceField, HiddenInput, TextInput, URLInput, \
-    SelectMultiple, ChoiceField, Select
-
-# наполняем choices  для формы
-# authors = list(map(lambda x: (x, x.user.username), Author.objects.all()))
-
-
-cats = list(map(lambda x: (x.id, x.name), Category.objects.all()))
-
+    SelectMultiple
 
 
 class PostAddForm(ModelForm):
-    # author = ChoiceField(
-    #     label='авторы',
-    #     choices=authors,
-    #     widget=Select(attrs={
-    #         'placeholder': "выберите автора",
-    #         'class': "inp",
-    #     })
-    # )
 
     categorys = MultipleChoiceField(
         label="категории",
-        choices=cats,
+        choices=Category.get_choices(),
         widget=SelectMultiple(attrs={
             'placeholder': "выберите категорию",
             'class': "inp",
