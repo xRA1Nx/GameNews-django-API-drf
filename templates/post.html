@@ -1,115 +1,129 @@
 {% extends 'default.html'%}
 
 {% block main %}
-    <main class="container container-white" id="main">
-{% endblock main %}
-      {% block section %}
-      <section class="white-section">
+<main class="container container-white" id="main">
+    {% endblock main %}
+    {% block section %}
+    <section class="white-section">
         <div class="post">
-          <h1 class="h1-postnews-title h1-white">
-            <p>
-              {{ post.title }}
-            </p>
-            {% if request.user.is_authenticated %}
-            <nav class="post-actions">
-               <a  class="post-actions-link describ-link" href="{% url 'gnews:subscribe' post.id %}">
-                {% if not is_subscriber %}
-                Подписаться
+            <h1 class="h1-postnews-title h1-white">
+                <p>
+                    {{ post.title }}
+                </p>
+                {% if request.user.is_authenticated %}
+                <nav class="post-actions">
+                    <a class="post-actions-link describ-link" href="{% url 'gnews:subscribe' post.id %}">
+                        {% if not is_subscriber %}
+                        Подписаться
+                        {% endif %}
+                    </a
+                    >
+
+
+                    <ul class="post-actions-list">
+                        {% if is_author%}
+                        <li>
+                            <a
+                                    class="post-actions-link post-actions-link-red"
+                                    href="{% url 'gnews:upd' post.id%}"
+                            >Редактировать</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                    class="post-actions-link post-actions-link-red"
+                                    href="{% url 'gnews:del' post.id%}"
+                            >Удалить</a
+                            >
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="post-actions-link" href="#comments"
+                            >Комментировать</a
+                            >
+                        </li>
+                    </ul>
+                </nav>
                 {% endif %}
-              </a
-              >
+            </h1>
+            <div class="post-author-conteiner">
+                <p>
+                    <span class="post-author-conteiner-label">АВТОР</span>
+                    <a class="post-author-conteiner-link" href="#">{{ post.author.user.username}}</a>
+                </p>
 
+                <p>
+                    <span class="post-author-conteiner-label">ОПУБЛИКОВАНО</span>
+                    <span class="post-author-conteiner-content">{{ post.date_time|date:"d.m.Y  h:i" }}</span>
+                </p>
+                <p>
+                    <span class="post-author-conteiner-label">КОММЕНТАРИИ</span>
+                    <span class="post-author-conteiner-content">{{ post.count_comments }}</span>
+                </p>
+            </div>
+            <img
+                    class="post-main-img"
+                    src="{{post.main_img}}"
+                    alt="POST big Img"
+            />
+            <div class="post-box">
+                {% for row in post_text %}
+                <p class="post-text">
+                    {{ row }}
+                </p>
+                {% endfor %}
+            </div>
 
-              <ul class="post-actions-list">
-                <li>
-                  <a
-                    class="post-actions-link post-actions-link-red"
-                    href="{% url 'gnews:upd' post.id%}"
-                    >Редактировать</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="post-actions-link post-actions-link-red"
-                    href="{% url 'gnews:del' post.id%}"
-                    >Удалить</a
-                  >
-                </li>
-                <li>
-                  <a class="post-actions-link" href="#comments"
-                    >Комментировать</a
-                  >
-                </li>
-              </ul>
-            </nav>
+        </div>
+        <div id="comments">
+
+            {% block comments-form%}
+            {% if request.user.is_authenticated %}
+
+            <form class="form-post-comment" method="post" action="{% url 'gnews:comment-add' post.id%}">
+
+                <textarea
+                        name = 'text'
+                        class="input-post-comment"
+                        placeholder="Введите ваше сообщение"
+                ></textarea>
+                <img
+                        class="comment-avatar avatar"
+                        src="{{ request.user.avatar }}"
+                        alt="user avatar"
+                />
+                <div class="comment-actions">
+                    <input class="submit-comment" type="submit">
+                </div>
+                {% csrf_token%}
+            </form>
             {% endif %}
-          </h1>
-          <div class="post-author-conteiner">
-            <p>
-              <span class="post-author-conteiner-label">АВТОР</span>
-              <a class="post-author-conteiner-link" href="#">{{ post.author.user.username}}</a>
-            </p>
+            {% endblock comments-form %}
 
-            <p>
-              <span class="post-author-conteiner-label">ОПУБЛИКОВАНО</span>
-              <span class="post-author-conteiner-content">{{ post.date_time|date:"d.m.Y  h:i" }}</span>
-            </p>
-            <p>
-              <span class="post-author-conteiner-label">КОММЕНТАРИИ</span>
-              <span class="post-author-conteiner-content">{{ post.count_comments }}</span>
-            </p>
-          </div>
-          <img
-            class="post-main-img"
-            src="{{post.main_img}}"
-            alt="POST big Img"
-          />
-          <div class = "post-box">
-            {% for row in post_text %}
-              <p class="post-text">
-              {{ row }}
-              </p>
+            {% for comment in comments%}
+            <div class="post-comment" id="comment-{{comment.id}}">
+                <p class="comment-user-nick">
+                    IvanovI <span>{{ comment.date_time|date:"d.m.Y  h:i" }}</span>
+                </p>
+                <img
+                        class="avatar comment-avatar"
+                        src="{{ comment.user.avatar }}"
+                        alt="user avatar"
+                />
+
+                <p class="comment-text">
+                    {{ comment.text }}
+                </p>
+                <nav>
+                     <a href="{% url 'gnews:comment-upd' post.id comment.id %}">редактировать</a>
+                    <a href="{% url 'gnews:comment-del' comment.id%}">удалить</a>
+                </nav>
+            </div>
             {% endfor %}
-          </div>
-
         </div>
-        <div class="discussion-conteiner" id="comments">
-          {% if request.user.is_authenticated %}
-          <form method="post" class="form-post-comment">
-            <textarea
-              class="input-post-comment"
-              placeholder="Введите ваше сообщение"
-            ></textarea>
-            <img
-              class="post-my-avatar avatar"
-              src="{{ request.user.avatar }}"
-              alt="user avatar"
-            />
-            <input class="submit-comment" type="submit" />
-            <!-- <a href="link-comm-edit">редактировать</a> -->
-          </form>
-          {% endif %}
+    </section>
+    {% endblock section %}
 
-          {% for comment in comments%}
-          <div class="post-comment">
-            <p class="comment-user-nick">
-              IvanovI <span>{{ comment.date_time|date:"d.m.Y  h:i" }}</span>
-            </p>
-            <img
-              class="avatar comment-avatar"
-              src="{{ comment.user.avatar }}"
-              alt="user avatar"
-            />
-
-            <p class="comment-text">
-              {{ comment.text }}
-            </p>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-      {% endblock section %}
-
-    </main>
+</main>
 
 

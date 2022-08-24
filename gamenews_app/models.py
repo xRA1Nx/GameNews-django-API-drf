@@ -59,6 +59,9 @@ class Comment(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
 
+    def get_absolute_url(self) -> str:
+        return f'/{self.post.id}#comment-{self.id}'
+
 
 class CategoryPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='news')

@@ -1,10 +1,9 @@
-from .models import Post, Category
+from .models import Post, Category, Comment
 from django.forms import ModelForm, CharField, Textarea, MultipleChoiceField, HiddenInput, TextInput, URLInput, \
     SelectMultiple
 
 
 class PostAddForm(ModelForm):
-
     categorys = MultipleChoiceField(
         label="категории",
         choices=Category.get_choices(),
@@ -52,4 +51,19 @@ class PostAddForm(ModelForm):
 
         widgets = {
             'author': HiddenInput(),
+        }
+
+
+class CommentUpdForm(ModelForm):
+    text = CharField(
+        label='текст',
+        widget=Textarea(attrs={'class': 'input-post-comment'})
+    )
+
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+        widgets = {
+            'text': Textarea(attrs={'class': 'myfieldclass'}),
         }

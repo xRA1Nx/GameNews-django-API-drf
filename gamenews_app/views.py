@@ -1,11 +1,13 @@
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.http import HttpResponseForbidden
 
-from .forms import PostAddForm
-from .models import Post, Author, Category
+from .forms import PostAddForm, CommentUpdForm
+from .models import Post, Author, Category, Comment
 from django.db.models import Count, Case, When, Q
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
 
 # с помощью annotate Получаем доп поле count_comments содержащее инфо о кол-ве комментариев
 qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
@@ -37,7 +39,6 @@ class NewsView(ListView):
     template_name = 'default.html'
     context_object_name = 'news'
     paginate_by = 9
-
 
     def get_queryset(self):
         category = self.request.GET.get('category')
@@ -77,19 +78,19 @@ class PostView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         cur_user = self.request.user
-        is_author = cur_user.is_authenticated and Author.objects.filter(user=cur_user).exists()
-
-        is_subscriber = False
         cats = self.object.categorys.all()
-        # формируем список из булен значений проверки каждой из категории на подписчика
-        subsribe_check_list = map(lambda x: self.request.user in x.subscribers.all(), cats)
 
         post_text = self.object.text.split("\n")
         context = super().get_context_data(**kwargs)
         context['post_text'] = post_text
+
+        is_author = cur_user.is_authenticated and Author.objects.filter(Q(user=cur_user) & Q(is_active=True)).exists()
         context['is_author'] = is_author
+
         context['aside'] = qs_comm_count.order_by('-count_comments')[0:3]
 
+        # формируем список из булен значений проверки каждой из категории на подписчика
+        subsribe_check_list = map(lambda x: self.request.user in x.subscribers.all(), cats)
         # в случаее если пользователь подписан на все категории статьи
         context['is_subscriber'] = all(subsribe_check_list)
         # обращаемся к обьекту post и берем из него все комменты
@@ -124,3 +125,45 @@ class PostDelView(PermissionRequiredMixin, DeleteView):
     template_name = 'post_del.html'
     success_url = "/"
     permission_required = 'gamenews_app.delete_post'
+
+
+class CommentUpdView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    template_name = 'comment-upd.html'
+    form_class = CommentUpdForm
+    permission_required = 'gamenews_app.change_comment'
+
+    # если пользователь не является создателем комментария то доступ запрещен
+    def get(self, request, *args, **kwargs):
+        result = super().post(self, request, *args, **kwargs)
+        if self.request.user.id == self.object.user.id:
+            return result
+        else:
+            return HttpResponseForbidden()
+
+
+@login_required
+def comment_del_view(request, **kwargs):
+    comment_id = kwargs.get('pk')
+    comment = Comment.objects.get(id=comment_id)
+    post_id = comment.post.id
+
+    if request.user.id == comment.object.user.id:
+        comment.delete()
+        return redirect(f'/{post_id}#comments')
+    # если пользователь не является создателем комментария то доступ запрещен
+    else:
+        return HttpResponseForbidden()
+
+
+@login_required
+def comment_add_view(request, **kwargs):
+    post_id = kwargs.get('pk')
+    text = request.POST.get('text')
+    user = request.user
+    # булен значение соответствие текущего пользователя автору статьи
+    accepted = request.user == Post.objects.get(id=post_id).author.user.id
+    # Если коммент пишет автор, то коммент сразу акцептуется
+    comment = Comment.objects.create(text=text, user=user, post_id=post_id, accepted=accepted)
+
+    return redirect(f'/{post_id}#comment-{comment.id}')

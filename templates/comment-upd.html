@@ -1,0 +1,41 @@
+{% extends 'default.html' %}
+
+{% block title %}
+Создание статьи
+{% endblock %}
+
+{% block main %}
+<main class="container container-white" id="main">
+    {% endblock %}
+
+    {% block section %}
+    <section class="white-section">
+        <div id="comments">
+            <h1 class="h1-white h1-white-margin-b">
+                Изменить ваш комментарий
+            </h1>
+
+            <form class="form-post-comment" method="post">
+                {% csrf_token%}
+                {% for field in form %}
+<!--                <label for="{{ field.name}}">{{ field.label}}</label>-->
+                {{ field }}
+                {% endfor %}
+                <img
+                        class="comment-avatar avatar"
+                        src="{{ request.user.avatar }}"
+                        alt="user avatar"
+                />
+                <div class="comment-actions">
+                    <input class="submit-comment" type="submit">
+                </div>
+
+            </form>
+        </div>
+    </section>
+    {% endblock section %}
+
+    {% block aside%}
+    {% endblock aside %}
+
+
