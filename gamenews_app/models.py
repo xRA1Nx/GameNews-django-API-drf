@@ -61,6 +61,8 @@ class Comment(models.Model):
         return f'/{self.post.id}#comment-{self.id}'
 
 
+
+
 class CategoryPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='news')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='cats')

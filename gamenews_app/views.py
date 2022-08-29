@@ -10,8 +10,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.auth.decorators import login_required, permission_required
 
 # с помощью annotate Получаем доп поле count_comments содержащее инфо о кол-ве комментариев
-qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
-
+# qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
+qs_comm_count = Post.objects.annotate(count_comments=Count(Case(When(comment__accepted=True, then=1))))
 
 @login_required
 def subscrib(request, **kwargs):
@@ -63,6 +63,8 @@ class NewsView(ListView):
         context = super().get_context_data(**kwargs)
         context['aside'] = qs_comm_count.order_by('-count_comments')[0:3]
         context['GET_params'] = url_category + url_search  # дополняем get параметр в пагинации
+
+        comment_count = Comment.objects.annotate()
 
         return context
 
