@@ -5,7 +5,6 @@ from gamenews_app.models import Author, Comment
 
 def is_active_author(user) -> bool:
     author = Author.objects.filter(user=user)
-    print(author)
     return author.exists() and author[0].is_active  # если юзер - автор, и автор активен
 
 

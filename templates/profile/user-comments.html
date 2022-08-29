@@ -1,4 +1,5 @@
 {% extends "default.html"%}
+
 comments
 
 {% block title %}
@@ -14,9 +15,9 @@ comments
     <section class="white-section-100">
         <div class="lk-box">
 
-             <div class="profile-actions">
-                    <p class="profile-button"><a href="{% url 'profile:lk' %}">В личный кабинет</a></p>
-                </div>
+            <div class="profile-actions">
+                <p class="profile-button"><a href="{% url 'profile:lk' %}">В личный кабинет</a></p>
+            </div>
 
 
             <h1 class="h1-white h1-white-margin-b">Подписки к вашим статьям </h1>
@@ -26,12 +27,10 @@ comments
             <div class="profile-main">
 
 
-
-
             </div>
         </div>
         <br>
-               <form method="GET">
+        <form method="GET">
             {{ filter.form }}
             <input type="submit" value="Найти">
         </form>
@@ -63,7 +62,7 @@ comments
                         </button>
                     </form>
                 </td>
-                   <td>
+                <td>
                     <form method="post" action="{% url 'comments:del' comment.id %}">
                         {% csrf_token %}
                         <button class="reuse-btn-red" name="comment-id" value="{{comment.id}}">

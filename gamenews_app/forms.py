@@ -1,17 +1,9 @@
-from .models import Post, Category, Comment
-from django.forms import ModelForm, CharField, Textarea, MultipleChoiceField, HiddenInput, TextInput, URLInput, \
+from .models import Post, Comment
+from django.forms import ModelForm, CharField, Textarea, HiddenInput, TextInput, URLInput, \
     SelectMultiple
 
 
 class PostAddForm(ModelForm):
-    categorys = MultipleChoiceField(
-        label="категории",
-        choices=Category.get_choices(),
-        widget=SelectMultiple(attrs={
-            'placeholder': "выберите категорию",
-            'class': "inp",
-            'size': 7
-        }))
 
     main_img = CharField(
         label="основная картинка",
@@ -51,6 +43,15 @@ class PostAddForm(ModelForm):
 
         widgets = {
             'author': HiddenInput(),
+            'categorys': SelectMultiple(attrs={
+                'placeholder': "выберите категорию",
+                'class': "inp",
+                'size': 7
+            })
+        }
+
+        labels = {
+            'categorys': 'Категории',
         }
 
 

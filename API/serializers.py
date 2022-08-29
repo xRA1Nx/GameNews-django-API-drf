@@ -7,6 +7,7 @@ from gamenews_app.models import Post, User, Category, CategoryPost, CategoryUser
 class CategorySerializer(serializers.ModelSerializer):
     name = serializers.MultipleChoiceField(choices=Category.get_choices())
 
+
     class Meta:
         model = Category
         fields = ['name']

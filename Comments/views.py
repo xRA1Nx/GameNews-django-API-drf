@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 
+from .filters import CommentsFilter
 from .permissions import is_active_author, is_authors_comment
 from gamenews_app.models import Comment
 from django.views.generic import ListView
@@ -13,11 +14,17 @@ class CommentsView(PermissionRequiredMixin, ListView):
     model = Comment
     template_name = 'profile/user-comments.html'
     context_object_name = 'comments'
-    paginate_by = 10
+    # paginate_by = 10
     permission_required = 'gamenews_app.view_comment'
 
+    def get_context_data(self,  **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = CommentsFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
     def get_queryset(self):
-        return Comment.objects.filter(Q(post__author__user=self.request.user) & Q(accepted=False))
+        comms = Comment.objects.filter(Q(post__author__user=self.request.user) & Q(accepted=False))
+        return CommentsFilter(self.request.GET, queryset=comms).qs
 
     def get(self, request, *args, **kwargs):
         res = super().get(self, request, *args, **kwargs)
