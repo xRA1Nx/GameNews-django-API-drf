@@ -17,7 +17,6 @@ qs_comm_count = Post.objects.annotate(count_comments=Count('comment'))
 def subscrib(request, **kwargs):
     post = Post.objects.get(id=kwargs['pk'])
     user = request.user
-    print(post.categorys.all())
     for cat in post.categorys.all():
         if user not in cat.subscribers.all():
             cat.subscribers.add(request.user)
@@ -148,7 +147,7 @@ def comment_del_view(request, **kwargs):
     comment = Comment.objects.get(id=comment_id)
     post_id = comment.post.id
 
-    if request.user.id == comment.object.user.id:
+    if request.user.id == comment.user.id:
         comment.delete()
         return redirect(f'/{post_id}#comments')
     # если пользователь не является создателем комментария то доступ запрещен
@@ -162,7 +161,7 @@ def comment_add_view(request, **kwargs):
     text = request.POST.get('text')
     user = request.user
     # булен значение соответствие текущего пользователя автору статьи
-    accepted = request.user == Post.objects.get(id=post_id).author.user.id
+    accepted = request.user == Post.objects.get(id=post_id).author.user
     # Если коммент пишет автор, то коммент сразу акцептуется
     comment = Comment.objects.create(text=text, user=user, post_id=post_id, accepted=accepted)
 

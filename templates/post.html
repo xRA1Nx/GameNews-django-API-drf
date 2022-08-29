@@ -103,7 +103,7 @@
             {% for comment in comments%}
             <div class="post-comment" id="comment-{{comment.id}}">
                 <p class="comment-user-nick">
-                    IvanovI <span>{{ comment.date_time|date:"d.m.Y  h:i" }}</span>
+                    {{comment.user}} <span>{{ comment.date_time|date:"d.m.Y  h:i" }}</span>
                 </p>
                 <img
                         class="avatar comment-avatar"
@@ -114,10 +114,12 @@
                 <p class="comment-text">
                     {{ comment.text }}
                 </p>
+                {% if request.user == comment.user %}
                 <nav>
                      <a href="{% url 'gnews:comment-upd' post.id comment.id %}">редактировать</a>
                     <a href="{% url 'gnews:comment-del' comment.id%}">удалить</a>
                 </nav>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

@@ -2,9 +2,7 @@ import re
 
 from allauth.account.models import EmailAddress
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-
 from users.models import User
 from gamenews_app.models import Author
 from django.views.generic import TemplateView

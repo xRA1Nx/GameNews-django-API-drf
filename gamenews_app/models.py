@@ -1,7 +1,5 @@
 from django.db import models
 from django.db.models import CharField
-from typing import List, Tuple
-
 from users.models import User
 
 

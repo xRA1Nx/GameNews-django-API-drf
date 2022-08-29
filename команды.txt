@@ -40,10 +40,10 @@ p8.categorys.add(Category.objects.get(name="Overwatch"))
 p9.categorys.add(Category.objects.get(name="Hearthstone"))
 
 
-c1 = Comment.objects.create(text = "привет", post_id=1, user_id=3)
-c6 = Comment.objects.create(text = "привет еще раз", post_id=1, user_id=3)
-c2 = Comment.objects.create(text = "круто!", post_id=2, user_id=2)
+c1 = Comment.objects.create(text = "привет", post_id=1, user_id=3, accepted=True)
+c6 = Comment.objects.create(text = "привет еще раз", post_id=1, user_id=3, accepted=True)
+c2 = Comment.objects.create(text = "круто!", post_id=2, user_id=2, accepted=True)
 
-c3 = Comment.objects.create(text = "супер!", post_id=3, user_id=2)
-c4 = Comment.objects.create(text = "очень интересно!", post_id=3, user_id=3)
-c5 = Comment.objects.create(text = "очень интересно!", post_id=3, user_id=3)     
+c3 = Comment.objects.create(text = "супер!", post_id=3, user_id=2, accepted=True)
+c4 = Comment.objects.create(text = "очень интересно!", post_id=3, user_id=3, accepted=True)
+c5 = Comment.objects.create(text = "очень интересно!", post_id=3, user_id=3, accepted=True)

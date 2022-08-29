@@ -83,7 +83,7 @@
                     <p class="profile-button">Для размещения и редактирования новостей нужны авторсие права
                         <a href="{% url 'profile:upgrade' %}"> Получить права</a></p>
                     {% else %}
-                    <p class="profile-button"><a href="#">МОДЕРИРОВАТЬ КОММЕНТАРИИ
+                    <p class="profile-button"><a href="{% url 'comments:list'%}">МОДЕРИРОВАТЬ КОММЕНТАРИИ
                     </a></p>
                     <p class="profile-button"><a href="{% url 'profile:downgrade' %}">Отказаться от авторских прав</a>
                     </p>

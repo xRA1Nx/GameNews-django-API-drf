@@ -21,6 +21,7 @@ urlpatterns = [
     path('', include('gamenews_app.urls', namespace='gamenews')),
     path('accounts/', include('allauth.urls')),
     path('lk/', include('userprofile.urls', namespace='gn_lk')),
+    path('comments/', include('Comments.urls', namespace='comments')),
     path('api/', include('API.urls')),
     path('api/auth/', include('rest_framework.urls', namespace='rest_framework')),
 
